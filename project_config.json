@@ -1,0 +1,10 @@
+{
+  "project_name": "path_to_your_project",
+  "language": "",
+  "framework": "",
+  "package_name": "",
+  "entity_path": "path_to_your_project/src/main/java//entity",
+  "repository_path": "path_to_your_project/src/main/java//repository",
+  "service_path": "path_to_your_project/src/main/java//service",
+  "controller_path": "path_to_your_project/src/main/java//controller"
+}
