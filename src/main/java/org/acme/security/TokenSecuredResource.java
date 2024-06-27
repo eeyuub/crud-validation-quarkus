@@ -36,7 +36,12 @@ public class TokenSecuredResource {
     @RolesAllowed({ "User", "Admin" })
     @Produces(MediaType.TEXT_PLAIN)
     public String helloRolesAllowed(@Context SecurityContext ctx) {
-        return getResponseString(ctx) + ", birthdate: " + jwt.getClaim("birthdate").toString() + ", name: " + jwt.getClaim("name").toString() + ", email: " + jwt.getClaim("email").toString() + ", password: " + jwt.getClaim("password").toString();
+        return jwt.getClaim("email").toString();
+      /*   return getResponseString(ctx) 
+        + ", birthdate: " + jwt.getClaim("birthdate").toString() 
+        + ", name: " + jwt.getClaim("name").toString()
+         + ", email: " + jwt.getClaim("email").toString()
+          + ", password: " + jwt.getClaim("password").toString(); */
     }
 
     @GET
