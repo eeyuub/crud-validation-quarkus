@@ -4,7 +4,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.NotFoundException;
+
 import org.acme.entities.City;
+import org.acme.entities.User;
 import org.acme.repositories.cityRepository;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +22,6 @@ public class cityService {
     cityRepository cityRepository;
 
     public cityService() {
-
     }
 
     public List<String> validateCity(City city) {
@@ -38,7 +40,15 @@ public class cityService {
     }
 
     public City getCity(Long id) {
-        return cityRepository.findById(id);
+        City city = cityRepository.findById(id);
+        if (city == null) {
+            throw new NotFoundException("City not found");
+        }
+        return city;
+    }
+
+    public City getCityByName(String name) {
+        return cityRepository.getCityByName(name);
     }
 
     public void createCity(City city) {

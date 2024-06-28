@@ -5,6 +5,8 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class cityRepository implements PanacheRepository<City>{
-    
+public class cityRepository implements PanacheRepository<City> {
+    public City getCityByName(String name) {
+        return find("name", name).firstResult();
+    }
 }

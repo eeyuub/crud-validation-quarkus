@@ -27,22 +27,18 @@ public class city {
     org.acme.services.cityService cityService;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public List<City> getAllCities() {
         return cityService.listAllCities();
     }
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public City getCity(@PathParam("id") Long id) {
         return cityService.getCity(id);
     }
 
     @POST
     @Transactional
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createCity(City city) {
         List<String> errorMessages = cityService.validateCity(city);
         if (errorMessages != null) {

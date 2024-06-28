@@ -1,9 +1,7 @@
 package org.acme.security;
 
-//import java.security.Principal;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-//import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.InternalServerErrorException;
@@ -11,13 +9,12 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
-import java.util.HashSet;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import io.smallrye.jwt.build.Jwt;
-import java.util.Arrays;
 
 @Path("/secured")
+@Produces(MediaType.APPLICATION_JSON)
 public class TokenSecuredResource {
 
     @Inject
@@ -26,7 +23,6 @@ public class TokenSecuredResource {
     @GET()
     @Path("permit-all")
     @PermitAll
-    @Produces(MediaType.TEXT_PLAIN)
     public String hello(@Context SecurityContext ctx) {
         return getResponseString(ctx);
     }
@@ -34,32 +30,29 @@ public class TokenSecuredResource {
     @GET
     @Path("roles-allowed")
     @RolesAllowed({ "User", "Admin" })
-    @Produces(MediaType.TEXT_PLAIN)
-    public String helloRolesAllowed(@Context SecurityContext ctx) {
-        return jwt.getClaim("email").toString();
-      /*   return getResponseString(ctx) 
-        + ", birthdate: " + jwt.getClaim("birthdate").toString() 
-        + ", name: " + jwt.getClaim("name").toString()
-         + ", email: " + jwt.getClaim("email").toString()
-          + ", password: " + jwt.getClaim("password").toString(); */
+    public Response helloRolesAllowed(@Context SecurityContext ctx) {
+        String userJson = jwt.getClaim("user");
+        return Response.ok(userJson).build();
     }
 
-    @GET
-    @Path("generate-token")
-    @PermitAll
-    @Produces(MediaType.TEXT_PLAIN)
-    public String generateToken() {
-        
-        String token = Jwt.issuer("https://localhost/issuer")
-                .upn("jdoe@quarkus.io")
-                .groups(new HashSet<>(Arrays.asList("User", "Admin")))
-                .claim("birthdate", "2001-07-13")
-                .claim("name", "John Doe")
-                .claim("email", "jdoe@quarkus.io")
-                .claim("password", "password")
-                .sign();
-        return token;
-    }
+    /*
+     * @GET
+     * 
+     * @Path("generate-token")
+     * 
+     * @PermitAll
+     * public String generateToken() {
+     * String token = Jwt.issuer("https://localhost/issuer")
+     * .upn("jdoe@quarkus.io")
+     * .groups(new HashSet<>(Arrays.asList("User", "Admin")))
+     * .claim("birthdate", "2001-07-13")
+     * .claim("name", "John Doe")
+     * .claim("email", "jdoe@quarkus.io")
+     * .claim("password", "password")
+     * .sign();
+     * return token;
+     * }
+     */
 
     private String getResponseString(SecurityContext ctx) {
         String name;
